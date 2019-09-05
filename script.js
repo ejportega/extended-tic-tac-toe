@@ -1,74 +1,93 @@
-const cells = document.querySelectorAll(".cell");
-const winMatrix = [
-    [0,1,2],
-    [3,4,5],
-    [6,7,8],
-    [0,3,6],
-    [1,4,7],
-    [2,5,8],
-    [0,4,8],
-    [2,4,6]
-]
-var game = true;
-var state = [0,0,0,0,0,0,0,0,0];
-const HUMAN = false;
-const COMPUTER = true;
-const HUMAN_VAL = -1;
-const COMPUTER_VAL = 1;
+var board = [];
+const HUMAN = 'X';
+const COMPUTER = 'O';
+// const winMatrix = [
+//     [0,1,2],
+//     [3,4,5],
+//     [6,7,8],
+//     [0,3,6],
+//     [1,4,7],
+//     [2,5,8],
+//     [0,4,8],
+//     [2,4,6]
+// ];
+var winMatrix = [];
+const cells = document.querySelectorAll('.cell');
+setWinMatrix();
+start();
 
-function start() {
-    for (var i = 0; i < cells.length; i++) {
-        cells[i].innerText = '';
-        state[i] = 0;
+function setWinMatrix() {
+    var n = 6;
+    var ctr = 0;
+    var temp = [];
+    for (var i = 0; i < n; i++) {
+        q = [];
+        for (var j = 0; j < n; j++) 
+            q.push(ctr++);
+        temp.push(q);
     }
 
-    game = true;
+    for (var i = 0; i < 54; i++) 
+        winMatrix.push([]);
+    
+    var x = 0; y = 0;
+    for (var i = 0; i < n; i++) {
+        for (var j = 0; j <= n-4; j++) {
+            var m = 0;
+            for (var k = j; k < j+4; k++) {
+                // horizontal 18
+                // winMatrix[x][y] = temp[i][k];
+                winMatrix[x].push(temp[i][k]);
+                // vertical 18
+                // winMatrix[x+1][y] = temp[k][i];
+                winMatrix[x+1].push(temp[k][i]);
+
+                // diagonal 18
+                if (i <= n-4) {
+                    // winMatrix[x+2][y] = temp[i+m][k];
+                    // winMatrix[x+3][y] = temp[(n-1)-(i+m++)][k];
+                    winMatrix[x+2].push(temp[i+m][k]);
+                    winMatrix[x+3].push(temp[(n-1)-(i+m++)][k]);
+                    y = 4;
+                }
+                else y = 2;
+            }
+            x += y;
+        }
+    }
 }
 
-
-function set(index, player) {
-    if (!game)
-        return;
-    
-    if (state[index] == 0) {
-        if (player == HUMAN) {
-            cells[index].innerText = 'X';
-            state[index] = HUMAN_VAL;
-        }
-        else {
-            cells[index].innerText = 'O';
-            state[index] = COMPUTER_VAL;
-        }
-    }
-    
-    if (checkWin(state, player)) {
-        console.log("GAME OVER");
-        game = false;
+function start() {
+    board = Array.from(Array(36).keys());
+    for (var i = 0; i < cells.length; i ++) {
+        cells[i].innerText = '';
+        cells[i].addEventListener('click', turnClick, false);
     }
 }
 
 function turnClick(cell) {
-    if (!game)
-        return;
-    
-    for (var i = 0; i < cells.length; i++) {
-        if (cells[i] == cell && state[i] == 0) {
-            set (i, HUMAN);
-            callAI();
-        }
+    if (typeof board[cell.target.id] == 'number') { 
+        turn(cell.target.id, HUMAN)
+        if (!checkTie()) turn(bestSpot(), COMPUTER);
     }
+} 
+
+function turn(cellId, player) {
+    board[cellId] = player;
+    document.getElementById(cellId).innerText = player;
+
+    if (checkWin(board, player)) 
+        console.log("GAME OVER");
 }
 
-function checkWin(board, player) {
-    var value = (player == HUMAN) ? HUMAN_VAL : COMPUTER_VAL;
-    
+function checkWin(newBoard, player) {
     for (var i = 0; i < winMatrix.length; i++) {
         var win = true;
         for (var j = 0; j < winMatrix[i].length; j++) {
-            if (board[winMatrix[i][j]] != value) {
+            if (newBoard[winMatrix[i][j]] != player) {
                 win = false;
                 break;
-            } 
+            }   
         }
         if (win)
             return true;
@@ -76,47 +95,72 @@ function checkWin(board, player) {
     return false;
 }
 
-function checkFull(board) {
-    for (var i = 0; i < board.length; i++) {
-        if (board[i] == 0)
-            return false;
+function emptySquares() {
+    return board.filter(x => typeof x == 'number');
+}
+
+function bestSpot() {
+    // return emptySquares()[0];
+    return minimax(board, COMPUTER).index;
+}
+
+function checkTie() {
+    if (emptySquares().length == 0) {
+        console.log("Tie Game!");
+        return true;
     }
-    return true;
+    return false;
 }
 
-function callAI() {
-    minimax(state, 0, COMPUTER);
-}
+function minimax(newBoard, player) {
+    var availSpots = emptySquares(newBoard);
 
-function minimax(board, depth, player) {
-		
-    if (checkWin(board, !player)) 
-        return -10 + depth;
-    if (checkFull(board)) 
-        return 0;
+    if (checkWin(newBoard, player)) 
+        return {score: -10};
+    else if (checkWin(newBoard, COMPUTER))
+        return {score: 10};
+    else if (availSpots.length == 0) 
+        return {score: 0};
 
-    var value = (player == HUMAN) ? HUMAN_VAL : COMPUTER_VAL;
-    var max = -Infinity;
-    var index = 0;
-    
-    for (var i = 0; i < board.length; i++) {
-        if (board[i] == 0) {
-            var newBoard = board.slice();
-            newBoard[i] = value;
-            moveval = -minimax(newBoard, depth+1, !player);
-            
-            
-            if (moveval > max) {
-                max = moveval;
-                index = i;
+    var moves = [];
+    for (var i = 0; i < availSpots.length; i++) {
+        var move = {};
+        move.index = newBoard[availSpots[i]];
+        newBoard[availSpots[i]] = player;
+
+        if (player == COMPUTER) {
+            var result = minimax(newBoard, HUMAN);
+            move.score = result.score;
+        }
+        else {
+            var result = minimax(newBoard, COMPUTER);
+            move.score = result.score;
+        }
+
+        newBoard[availSpots[i]] = move.index;
+
+        moves.push(move);
+    }
+
+    var bestMove;
+    if (player == COMPUTER) {
+        var bestScore = -10000;
+        for (var i = 0; i < moves.length; i++) {
+            if (moves[i].score > bestScore) {
+                bestScore = moves[i].score;
+                bestMove = i;
+            }
+        }
+    }
+    else {
+        var bestScore = 10000;
+        for (var i = 0; i < moves.length; i++) {
+            if (moves[i].score < bestScore) {
+                bestScore = moves[i].score;
+                bestMove = i;
             }
         }
     }
 
-    if (depth == 0) 
-        set(index, COMPUTER);
-    
-    return max;
+    return moves[bestMove];
 }
-
-start();
