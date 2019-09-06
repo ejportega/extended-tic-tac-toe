@@ -1,1 +1,1 @@
-# extended-tic-tac-toe
+# extends-tic-tac-toe
