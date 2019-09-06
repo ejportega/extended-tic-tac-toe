@@ -1,19 +1,20 @@
+const cells = document.querySelectorAll('.cell');
 var board = [];
 const HUMAN = 'X';
 const COMPUTER = 'O';
-// const winMatrix = [
-//     [0,1,2],
-//     [3,4,5],
-//     [6,7,8],
-//     [0,3,6],
-//     [1,4,7],
-//     [2,5,8],
-//     [0,4,8],
-//     [2,4,6]
-// ];
-var winMatrix = [];
-const cells = document.querySelectorAll('.cell');
-setWinMatrix();
+var game = true;
+winMatrix = [
+    [0,1,2],
+    [3,4,5],
+    [6,7,8],
+    [0,3,6],
+    [1,4,7],
+    [2,5,8],
+    [0,4,8],
+    [2,4,6]
+]
+// var winMatrix = [];
+// setWinMatrix();
 start();
 
 function setWinMatrix() {
@@ -36,16 +37,12 @@ function setWinMatrix() {
             var m = 0;
             for (var k = j; k < j+4; k++) {
                 // horizontal 18
-                // winMatrix[x][y] = temp[i][k];
                 winMatrix[x].push(temp[i][k]);
                 // vertical 18
-                // winMatrix[x+1][y] = temp[k][i];
                 winMatrix[x+1].push(temp[k][i]);
 
                 // diagonal 18
                 if (i <= n-4) {
-                    // winMatrix[x+2][y] = temp[i+m][k];
-                    // winMatrix[x+3][y] = temp[(n-1)-(i+m++)][k];
                     winMatrix[x+2].push(temp[i+m][k]);
                     winMatrix[x+3].push(temp[(n-1)-(i+m++)][k]);
                     y = 4;
@@ -58,17 +55,22 @@ function setWinMatrix() {
 }
 
 function start() {
-    board = Array.from(Array(36).keys());
+    game = true
+    board = Array.from(Array(9).keys());
     for (var i = 0; i < cells.length; i ++) {
         cells[i].innerText = '';
+        cells[i].id = i;
         cells[i].addEventListener('click', turnClick, false);
     }
 }
 
 function turnClick(cell) {
-    if (typeof board[cell.target.id] == 'number') { 
+    if (game && typeof board[cell.target.id] == 'number') { 
         turn(cell.target.id, HUMAN)
-        if (!checkTie()) turn(bestSpot(), COMPUTER);
+        if (!checkTie() && !checkWin(board, HUMAN)) 
+            turn(bestSpot(), COMPUTER);
+        else   
+            game = false;
     }
 } 
 
@@ -76,8 +78,10 @@ function turn(cellId, player) {
     board[cellId] = player;
     document.getElementById(cellId).innerText = player;
 
-    if (checkWin(board, player)) 
+    if (checkWin(board, player)) {
         console.log("GAME OVER");
+        game = false;
+    }
 }
 
 function checkWin(newBoard, player) {
@@ -100,7 +104,6 @@ function emptySquares() {
 }
 
 function bestSpot() {
-    // return emptySquares()[0];
     return minimax(board, COMPUTER).index;
 }
 
