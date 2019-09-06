@@ -3,18 +3,9 @@ var board = [];
 const HUMAN = 'X';
 const COMPUTER = 'O';
 var game = true;
-winMatrix = [
-    [0,1,2],
-    [3,4,5],
-    [6,7,8],
-    [0,3,6],
-    [1,4,7],
-    [2,5,8],
-    [0,4,8],
-    [2,4,6]
-]
-// var winMatrix = [];
-// setWinMatrix();
+var winMatrix = [];
+
+setWinMatrix();
 start();
 
 function setWinMatrix() {
@@ -56,7 +47,7 @@ function setWinMatrix() {
 
 function start() {
     game = true
-    board = Array.from(Array(9).keys());
+    board = Array.from(Array(36).keys());
     for (var i = 0; i < cells.length; i ++) {
         cells[i].innerText = '';
         cells[i].id = i;
