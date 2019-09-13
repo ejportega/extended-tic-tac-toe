@@ -3,51 +3,71 @@ var board = [];
 const HUMAN = 'X';
 const COMPUTER = 'O';
 var game = true;
-var winMatrix = [];
+winMatrix = [
+    [0,1,2],
+    [3,4,5],
+    [6,7,8],
+    [0,3,6],
+    [1,4,7],
+    [2,5,8],
+    [0,4,8],
+    [2,4,6]
+]
 
-setWinMatrix();
+// setWinMatrix();
 start();
 
-function setWinMatrix() {
-    var n = 6;
-    var ctr = 0;
-    var temp = [];
-    for (var i = 0; i < n; i++) {
-        q = [];
-        for (var j = 0; j < n; j++) 
-            q.push(ctr++);
-        temp.push(q);
+function getAvailSpots(newBoard) {
+    availSpots = []
+    for (var i = 0; i < newBoard.length; i++) {
+        if (typeof (newBoard[i]) == typeof(0) && 
+        ((i+3)<=8 && typeof(newBoard[i+3]) != typeof(0)) || 
+        ((i+3)>8 && typeof(newBoard[i]) == typeof(0)))
+        availSpots.push(newBoard[i])
     }
-
-    for (var i = 0; i < 54; i++) 
-        winMatrix.push([]);
-    
-    var x = 0; y = 0;
-    for (var i = 0; i < n; i++) {
-        for (var j = 0; j <= n-4; j++) {
-            var m = 0;
-            for (var k = j; k < j+4; k++) {
-                // horizontal 18
-                winMatrix[x].push(temp[i][k]);
-                // vertical 18
-                winMatrix[x+1].push(temp[k][i]);
-
-                // diagonal 18
-                if (i <= n-4) {
-                    winMatrix[x+2].push(temp[i+m][k]);
-                    winMatrix[x+3].push(temp[(n-1)-(i+m++)][k]);
-                    y = 4;
-                }
-                else y = 2;
-            }
-            x += y;
-        }
-    }
+    return availSpots
 }
+
+// function setWinMatrix() {
+//     var n = 6;
+//     var ctr = 0;
+//     var temp = [];
+//     for (var i = 0; i < n; i++) {
+//         q = [];
+//         for (var j = 0; j < n; j++) 
+//             q.push(ctr++);
+//         temp.push(q);
+//     }
+
+//     for (var i = 0; i < 54; i++) 
+//         winMatrix.push([]);
+    
+//     var x = 0; y = 0;
+//     for (var i = 0; i < n; i++) {
+//         for (var j = 0; j <= n-4; j++) {
+//             var m = 0;
+//             for (var k = j; k < j+4; k++) {
+//                 // horizontal 18
+//                 winMatrix[x].push(temp[i][k]);
+//                 // vertical 18
+//                 winMatrix[x+1].push(temp[k][i]);
+
+//                 // diagonal 18
+//                 if (i <= n-4) {
+//                     winMatrix[x+2].push(temp[i+m][k]);
+//                     winMatrix[x+3].push(temp[(n-1)-(i+m++)][k]);
+//                     y = 4;
+//                 }
+//                 else y = 2;
+//             }
+//             x += y;
+//         }
+//     }
+// }
 
 function start() {
     game = true
-    board = Array.from(Array(36).keys());
+    board = Array.from(Array(9).keys());
     for (var i = 0; i < cells.length; i ++) {
         cells[i].innerText = '';
         cells[i].id = i;
