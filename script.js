@@ -91,6 +91,7 @@ function turn(cellId, player) {
 
     if (checkWin(board, player)) {
         console.log("GAME OVER");
+        alert("GAME OVER")
         game = false;
     }
 }
@@ -121,6 +122,7 @@ function bestSpot() {
 function checkTie() {
     if (emptySquares().length == 0) {
         console.log("Tie Game!");
+        alert("TIE GAME!")
         return true;
     }
     return false;
