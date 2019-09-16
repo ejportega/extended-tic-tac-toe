@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="../static/style.css">
+  <title>Tic-Tac-Toe</title>
+</head>
+<body>
+  <div class="wrapper">
+    <h1>Extended Tic-Tac-Toe</h1>
+    <div class="board">
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+    </div>
+    <!-- end board -->
+    <div class="scores">
+      <div class="player">
+        <p>PLAYER(X)</p>
+        <p id="humanScore"></p>
+      </div>
+      <div class="ties">
+        <p>TIE</p>
+        <p id="tieScore"></p>
+      </div>
+      <div class="computer">
+        <p>COMPUTER(O)</p>
+        <p id="computerScore"></p>
+      </div>
+    </div>
+    <!-- end scores -->
+    <div class="buttons">
+      <button id="start">START</button>
+      <button onclick="reset()">RESET</button>
+    </div>
+  </div>
+  <!-- end wrapper -->
+  <script src="../static/script.js"></script>
+</body>
+</html>

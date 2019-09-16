@@ -1,0 +1,95 @@
+@font-face {
+  font-family: 'ConcertOne-Regular';
+  src: url('font/ConcertOne-Regular.ttf') format('truetype');  
+}
+
+body {
+  font-family: 'ConcertOne-Regular';
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  color: #fff;
+  background-color: #000;
+}
+
+.wrapper {
+  overflow: hidden;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.board {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 60vh;
+  /* height: 50vh; */
+  margin: 0 auto;
+}
+
+.cell {
+  width: 15vh;
+  height: 15vh;
+  font-size: 5.0rem;
+  font-weight: 900;
+  background-color: #ff6600;
+  color: #000;
+  margin: 2px;  
+  border-radius: 5px;
+  transition: 1.2s;
+}
+
+.cell:hover {
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.scores {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2%;
+  margin-bottom: 4%;
+  padding-left: 5%;
+  line-height: 0.1;
+}
+
+.scores > div:not(:last-child) {
+  margin-right: 10.0em;
+
+}
+
+.scores p {
+  font-size: 2.0rem;
+}
+
+.buttons {
+  padding-left: 5%;
+}
+
+.buttons button {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-right: 5%;
+  padding: 10px;
+  /* background-color: #ff6600; */
+  color: #000 ;
+  border-radius: 5px;
+  border: none;
+  transition: all 0.4s ease 0s;
+}
+
+.buttons button:hover {
+  text-shadow: 0px 0px 6px rgba(255, 255, 255, 1);
+  -webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+  -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+  transition: all 0.4s ease 0s;
+}
+
+h1 {
+  font-size: 2.50em;
+  font-weight: 900;
+}
