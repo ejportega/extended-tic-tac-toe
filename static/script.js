@@ -203,6 +203,8 @@ function gameOver(player) {
     }, 100);
     tieScore++;
     updateScore();
+    for (var i = 0; i < cells.length; i++)
+      cells[i].classList.add("blinking");
     return true;
   }
   return false;
