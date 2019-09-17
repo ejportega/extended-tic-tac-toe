@@ -32,7 +32,7 @@ def setTurn(index):
   if (type(board[index]) == type(0)):
       turn(index, HUMAN)
       if (not checkTie() and not checkWin(board, HUMAN)):
-        turn(bestSpot(), COMPUTER)
+        turn(aiTurn(), COMPUTER)
       else:
         game = False
 
@@ -64,7 +64,7 @@ def checkTie():
 def emptySquares(board):
   return [x for x in board if type(x) == type(0)]
 
-def bestSpot():
+def aiTurn():
   return minimax(board, COMPUTER)['index']
                 
 def minimax(newBoard, player):
