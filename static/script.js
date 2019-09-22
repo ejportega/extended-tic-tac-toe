@@ -46,7 +46,7 @@ function start() {
 }
 
 function turnClick(cell) {
-  if (game && typeof board[cell.target.id] == "number") {
+  if (game && typeof board[cell.target.id] == "number" && getAvailSpots(board).includes(board[cell.target.id])) {
     turn(cell.target.id, HUMAN);
     if (!checkFull() && !checkWin(board, HUMAN)) {
       setTimeout(function () {
@@ -56,6 +56,8 @@ function turnClick(cell) {
       }, 300);
     }
   }
+  else if (game) 
+    playSound('nope')
 }
 
 function turn(cellId, player) {
@@ -66,6 +68,7 @@ function turn(cellId, player) {
 
   if (gameOver(player)) {
     document.getElementById("start").addEventListener("click", start, false);
+    game = false
   }
 }
 
