@@ -3,16 +3,18 @@ var board = [];
 const HUMAN = "X";
 const COMPUTER = "O";
 var game = true;
-winMatrix = [
-  [0, 1, 2],
-  [3, 4, 5],
-  [6, 7, 8],
-  [0, 3, 6],
-  [1, 4, 7],
-  [2, 5, 8],
-  [0, 4, 8],
-  [2, 4, 6]
-];
+// winMatrix = [
+//   [0, 1, 2],
+//   [3, 4, 5],
+//   [6, 7, 8],
+//   [0, 3, 6],
+//   [1, 4, 7],
+//   [2, 5, 8],
+//   [0, 4, 8],
+//   [2, 4, 6]
+// ];
+winMatrix = [];
+setWinMatrix();
 
 const sound = new Audio();
 var firstTurn = COMPUTER;
@@ -49,7 +51,7 @@ function turnClick(cell) {
     if (!checkFull() && !checkWin(board, HUMAN)) {
       setTimeout(function () {
         var aiturn = aiTurn();
-        // console.log(aiturn);
+        console.log(aiturn);
         turn(aiturn.index, COMPUTER);
       }, 300);
     }
@@ -106,8 +108,8 @@ function getAvailSpots(newBoard) {
   availSpots = []
   for (var i = 0; i < newBoard.length; i++) {
     if (typeof (newBoard[i]) == typeof (0) &&
-      ((i + 3) <= 8 && typeof (newBoard[i + 3]) != typeof (0)) ||
-      ((i + 3) > 8 && typeof (newBoard[i]) == typeof (0)))
+      ((i + 6) <= 35 && typeof (newBoard[i + 6]) != typeof (0)) ||
+      ((i + 6) > 35 && typeof (newBoard[i]) == typeof (0)))
       availSpots.push(newBoard[i])
   }
   return availSpots
@@ -116,11 +118,11 @@ function getAvailSpots(newBoard) {
 function minimax(newBoard, depth, player) {
   var availSpots = getAvailSpots(newBoard);
 
-  if (checkWin(newBoard, player))
-    return { score: depth - 10 };
-  else if (checkWin(newBoard, COMPUTER))
-    return { score: 10 - depth };
-  else if (availSpots.length == 0)
+  if (checkWin(newBoard, player) || depth >= 5)
+    return { score: depth - 100 };
+  else if (checkWin(newBoard, COMPUTER) || depth >= 5)
+    return { score: 100 - depth };
+  else if (availSpots.length == 0 || depth >= 5)
     return { score: 0 };
 
   var moves = [];
@@ -139,7 +141,7 @@ function minimax(newBoard, depth, player) {
 
     newBoard[availSpots[i]] = move.index;
     moves.push(move);
-  }
+  } 
 
   var bestMove;
   if (player == COMPUTER) {
